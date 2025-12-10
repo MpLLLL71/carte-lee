@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Carte Cadeau – Lee</title>
+
+<style>
+
+/* ---- COMÈTE ---- */
+.comet {
+    position:absolute;
+    width:120px;
+    height:2px;
+    background: linear-gradient(90deg, white, rgba(255,255,255,0));
+    box-shadow: 0 0 6px white;
+    opacity:0.8;
+    transform: rotate(20deg);
+    pointer-events:none;
+}
+
+body{
+    margin:0;
+    font-family: Arial, sans-serif;
+    background: radial-gradient(circle at 50% 20%, #1b2a70, #000);
+    color:white;
+    text-align:center;
+    overflow:hidden;
+}
+
+.page{
+    display:none;
+    padding:40px;
+}
+
+.active{
+    display:block;
+}
+
+h1,h2{
+    font-weight:300;
+}
+
+/* Bouton */
+button{
+    margin-top:30px;
+    padding:15px 30px;
+    font-size:20px;
+    border:none;
+    border-radius:10px;
+    background:#4c6ef5;
+    color:white;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#6b84ff;
+}
+
+/* Zone gravité */
+#space{
+    position:absolute;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+    pointer-events:none;
+}
+
+/* Planète centrale */
+#planet{
+    position:absolute;
+    width:160px;
+    height:160px;
+    border-radius:50%;
+    left:50%;
+    top:56%;
+    transform:translate(-50%, -50%);
+
+    background: url("https://upload.wikimedia.org/wikipedia/commons/9/97/The_Earth_seen_from_Apollo_17.jpg") center/cover no-repeat;
+
+    box-shadow:
+        0 0 35px rgba(120,160,255,0.9),
+        inset -10px 0 15px rgba(0,0,0,0.4);
+
+    pointer-events:none;
+}
+
+
+/* Etoiles attirées */
+.star{
+    position:absolute;
+    width:4px;
+    height:4px;
+    background:white;
+    border-radius:50%;
+    opacity:0.8;
+}
+
+#capsule{
+    width:180px;
+    height:220px;
+    margin:40px auto;
+
+    background-image: url("https://www.db-z.com/wp-content/uploads/2012/11/life-armour-pod-spatial-saiyan-dragon-ball-2.jpg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    cursor:pointer;
+    transition:1s ease;
+}
+
+#capsule.open{
+    transform:scale(1.15);
+    filter: brightness(1.15);
+}
+
+
+.fade{
+    opacity:0;
+    animation: fadeIn 1.8s forwards;
+}
+
+@keyframes fadeIn{
+    from{opacity:0;}
+    to{opacity:1;}
+}
+
+/* 🌙 LUNE */
+#moon{
+    position:absolute;
+    width:50px;
+    height:50px;
+    border-radius:50%;
+    left:50%;
+    top:48%;
+
+    background:url("https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg") 
+            center/cover no-repeat;
+
+    box-shadow:0 0 15px rgba(255,255,255,0.7);
+    pointer-events:none;
+
+    animation: orbitMoon 60s linear infinite;
+}
+
+/* Orbite douce autour de la Terre */
+@keyframes orbitMoon{
+    from{
+        transform: rotate(0deg) translateX(110px) rotate(0deg);
+    }
+    to{
+        transform: rotate(360deg) translateX(110px) rotate(-360deg);
+    }
+}
+
+/* ✨ LUEUR DU LIVRE */
+.bookGlow{
+    border-radius:12px;
+    box-shadow:
+        0 0 20px rgba(150,200,255,0.9),
+        0 0 40px rgba(100,150,255,0.6);
+}
+
+/* 🌌 NUAGE COSMIQUE */
+
+#nebula{
+    position:absolute;
+    width:300%;
+    height:200%;
+    top:-50%;
+    left:-100%;
+
+    background:
+       radial-gradient(circle at 20% 40%, rgba(120,160,255,0.10), transparent 40%),
+       radial-gradient(circle at 60% 60%, rgba(180,120,255,0.08), transparent 45%),
+       radial-gradient(circle at 80% 30%, rgba(120,200,255,0.10), transparent 50%);
+
+    filter: blur(60px);
+    opacity:0.35;
+
+    animation: nebulaFlow 180s linear infinite;
+
+    pointer-events:none;
+    z-index:2;
+}
+
+@keyframes nebulaFlow{
+    from{
+        transform: translateX(0);
+    }
+    to{
+        transform: translateX(40%);
+    }
+}
+
+.page{ z-index:10; }
+#planet, #moon{ z-index:1; }
+
+#musicToggle{
+    position:fixed;
+    bottom:15px;
+    right:15px;
+    background:#4c6ef5;
+    border:none;
+    border-radius:30px;
+    padding:10px 16px;
+    color:white;
+    font-size:14px;
+    cursor:pointer;
+    z-index:20;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- Effet gravité -->
+<div id="space"></div>
+<div id="nebula"></div>
+<div id="planet"></div>
+<div id="moon"></div>
+
+<!-- PAGE 1 -->
+<div class="page active" id="p1">
+    <h1>🌌 Hello Lee !</h1>
+    <h2>A gift from space awaits you… 🚀</h2>
+    <button onclick="go(2)">Discover my gift</button>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page" id="p2">
+    <h1>A space capsule is approaching…</h1>
+    <div id="capsule" onclick="openCapsule()"></div>
+    <p>(Touch the capsule)</p>
+</div>
+
+<!-- PAGE 3 -->
+<div class="page" id="p3">
+    <h1 class="fade">✨ Your gift is…</h1>
+    <h2 class="fade">A book: 📘 "100 Things About Space"</h2>
+
+    <img src="images/book100.jpg"
+     width="220"
+     class="fade bookGlow"
+     alt="Livre 100 Things About Space">
+
+
+</div>
+
+<script>
+
+/* ----- Navigation ----- */
+
+function go(p){
+    document.querySelectorAll('.page').forEach(
+        x => x.classList.remove('active')
+    );
+    document.getElementById('p'+p).classList.add('active');
+}
+
+/* ----- Capsule ----- */
+
+function openCapsule(){
+    document.getElementById('capsule').classList.add('open');
+    setTimeout(()=>go(3),1200);
+}
+
+/* ----- GRAVITE SPATIALE ----- */
+
+const space = document.getElementById("space");
+const stars = [];
+
+function spawnStar(){
+    let s = document.createElement("div");
+    s.className = "star";
+
+    s.x = Math.random() * window.innerWidth;
+    s.y = Math.random() * window.innerHeight;
+    s.speed = 0.006 + Math.random()*0.004;
+
+    s.style.left = s.x+"px";
+    s.style.top = s.y+"px";
+
+    stars.push(s);
+    space.appendChild(s);
+}
+
+for(let i=0;i<90;i++){
+    spawnStar();
+}
+
+function animateGravity(){
+
+    const planet = document.getElementById("planet");
+    const rect = planet.getBoundingClientRect();
+
+    let centerX = rect.left + rect.width/2;
+    let centerY = rect.top + rect.height/2;
+
+    stars.forEach(s =>{
+
+        let dx = centerX - s.x;
+        let dy = centerY - s.y;
+
+        s.x += dx * s.speed;
+        s.y += dy * s.speed;
+
+        s.style.left = s.x+"px";
+        s.style.top  = s.y+"px";
+
+    });
+
+    requestAnimationFrame(animateGravity);
+}
+
+// Lancer l’animation
+animateGravity();
+
+// -------- COMÈTE LENTE --------
+
+function spawnComet(){
+
+    let comet = document.createElement("div");
+    comet.className = "comet";
+
+    let startY = 60 + Math.random() * (window.innerHeight - 120);
+
+    comet.style.top  = startY + "px";
+    comet.style.left = "-150px";
+
+    document.body.appendChild(comet);
+
+    let x = -150;
+
+    let speed = 0.8;   // vitesse douce
+
+    function move(){
+        x += speed;
+        comet.style.left = x + "px";
+
+        if(x < window.innerWidth + 150){
+            requestAnimationFrame(move);
+        } else {
+            comet.remove();
+        }
+    }
+
+    move();
+}
+
+/* 👉 Une comète toutes les 12 à 20 secondes */
+setInterval(spawnComet, 12000 + Math.random()*8000);
+
+
+</script>
+</body>
+</html>

@@ -211,6 +211,70 @@ button:hover{
     z-index:20;
 }
 
+/* 📱 OPTIMISATION MOBILE */
+@media (max-width: 768px){
+
+    body {
+        font-size: 16px;
+    }
+
+    h1{
+        font-size: 1.6rem;
+    }
+
+    h2{
+        font-size: 1.1rem;
+    }
+
+    button{
+        padding:12px 22px;
+        font-size:16px;
+        border-radius:20px;
+    }
+
+    .page{
+        padding:20px;
+        min-height:100vh;
+        display:flex;
+        flex-direction:column;
+        justify-content:flex-start;
+        align-items:center;
+    }
+
+    /* Remonter le contenu principal */
+    #p1{
+        padding-top:40px;
+    }
+
+    /* Capsule mieux centrée */
+    #capsule{
+        width:150px;
+        height:180px;
+        margin-top:25px;
+    }
+
+    /* Livre final plus visible */
+    .bookGlow{
+        margin-top:20px;
+        width:180px;
+    }
+
+    /* 🌍 Terre + 🌙 Lune reculées */
+    #planet{
+        width:130px;
+        height:130px;
+        top:62%;
+    }
+
+    #moon{
+        width:38px;
+        height:38px;
+        top:57%;
+    }
+
+}
+
+
 </style>
 </head>
 
